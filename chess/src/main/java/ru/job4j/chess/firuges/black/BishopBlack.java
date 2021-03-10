@@ -19,32 +19,16 @@ public class BishopBlack implements Figure {
     @Override
     public Cell[] way(Cell dest) {
         if (!isDiagonal(position, dest)) {
-            throw new ImpossibleMoveException(
-                    String.format("Could not move by diagonal from %s to %s", position, dest)
-            );
+            throw new ImpossibleMoveException(String.format("Could not move by diagonal from %s to %s", position, dest));
         }
         int size = Math.abs(dest.getX() - position.getX());
         Cell[] steps = new Cell[size];
-        int deltaX = 1;
-        int deltaY = 1;
+        int deltaX = (dest.getX() - position.getX())/size;
+        int deltaY = (dest.getY() - position.getY())/size;
         for (int index = 0; index < size; index++) {
-            if(position.getX() < dest.getX() && position.getY() < dest.getY()) {
-                int x = position.getX() + index + deltaX;
-                int y = position.getY() + index + deltaY;
+                int x = position.getX() + index * deltaX + deltaX;
+                int y = position.getY() + index * deltaY + deltaY;
                 steps[index] = Cell.findBy(x, y);
-            } else if (position.getX() > dest.getX() && position.getY() > dest.getY()){
-                int x = position.getX() - index - deltaX;
-                int y = position.getY() - index - deltaY;
-                steps[index] = Cell.findBy(x, y);
-            } else if (position.getX() < dest.getX() && position.getY() > dest.getY()){
-                int x = position.getX() + index + deltaX;
-                int y = position.getY() - index - deltaY;
-                steps[index] = Cell.findBy(x, y);
-            } else if (position.getX() > dest.getX() && position.getY() < dest.getY()){
-                int x = position.getX() - index - deltaX;
-                int y = position.getY() + index + deltaY;
-                steps[index] = Cell.findBy(x, y);
-            }
         }
         return steps;
     }
